@@ -82,7 +82,7 @@ export default function Discover() {
 							<TablerIcon name="square" size={20} className="text-foreground" />
 							<Menu.ItemTitle>Slide</Menu.ItemTitle>
 						</Menu.Item>
-						<Menu.Item isDisabled>
+						<Menu.Item onPress={() => router.push("/sheet")}>
 							<TablerIcon
 								name="layout-bottombar"
 								size={20}

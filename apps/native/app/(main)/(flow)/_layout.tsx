@@ -15,10 +15,31 @@ import {
 	type OverlayProps,
 	useScreenAnimation,
 } from "react-native-screen-transitions";
+import type { BlankStackNavigationOptions } from "react-native-screen-transitions/blank-stack";
 import { getFlowOptions } from "@/components/navigation/screen-options";
 import { Stack } from "@/components/stack";
 
 const BOTTOM_OFFSET = 16;
+
+type FlowMeta = {
+	onPress: () => void;
+};
+
+const createFlowMeta = (onPress: FlowMeta["onPress"]): FlowMeta => ({
+	onPress,
+});
+
+const withFlowMeta = (
+	options: BlankStackNavigationOptions,
+	onPress: FlowMeta["onPress"],
+): BlankStackNavigationOptions => ({
+	...options,
+	meta: createFlowMeta(onPress),
+});
+
+const hasFlowMeta = (meta?: OverlayProps["meta"]): meta is FlowMeta => {
+	return typeof meta?.onPress === "function";
+};
 
 export default function FlowLayout() {
 	return (
@@ -32,42 +53,31 @@ export default function FlowLayout() {
 			<Stack>
 				<Stack.Screen
 					name="screen1"
-					options={{
-						overlay: FlowOverlay,
-						meta: {
-							onPress: () => router.navigate("/screen2"),
+					options={withFlowMeta(
+						{
+							overlay: FlowOverlay,
 						},
-					}}
+						() => router.navigate("/screen2"),
+					)}
 				/>
 				<Stack.Screen
 					name="screen2"
-					options={{
-						...getFlowOptions(),
-						meta: {
-							onPress: () => {
-								router.navigate("/screen3");
-								Keyboard.dismiss();
-							},
-						},
-					}}
+					options={withFlowMeta(getFlowOptions(), () => {
+						router.navigate("/screen3");
+						Keyboard.dismiss();
+					})}
 				/>
 				<Stack.Screen
 					name="screen3"
-					options={{
-						...getFlowOptions(),
-						meta: {
-							onPress: () => router.navigate("/screen4"),
-						},
-					}}
+					options={withFlowMeta(getFlowOptions(), () =>
+						router.navigate("/screen4"),
+					)}
 				/>
 				<Stack.Screen
 					name="screen4"
-					options={{
-						...getFlowOptions(),
-						meta: {
-							onPress: () => router.dismissTo("/(main)/(tabs)"),
-						},
-					}}
+					options={withFlowMeta(getFlowOptions(), () =>
+						router.dismissTo("/(main)/(tabs)"),
+					)}
 				/>
 			</Stack>
 		</View>
@@ -123,6 +133,7 @@ const StepProgress = ({ progress }: { progress: SharedValue<number> }) => {
 const FlowOverlay = ({ progress, meta }: OverlayProps) => {
 	const { bottom } = useSafeAreaInsets();
 	const screenAnimation = useScreenAnimation();
+	const onPress = hasFlowMeta(meta) ? meta.onPress : undefined;
 	const adjustedProgress = useDerivedValue(() => progress.value - 1);
 	const keyboardProgress = useSharedValue(0);
 	const referenceHeight = useSharedValue<number | null>(null);
@@ -179,7 +190,7 @@ const FlowOverlay = ({ progress, meta }: OverlayProps) => {
 			<View className="mt-2 h-1.5 w-32 rounded-3xl bg-border" />
 			<Animated.View className="w-full gap-4" style={buttonStyle}>
 				<StepProgress progress={adjustedProgress} />
-				<Button onPress={() => (meta as { onPress: () => void })?.onPress?.()}>
+				<Button onPress={onPress}>
 					<Button.Label>Next</Button.Label>
 				</Button>
 			</Animated.View>

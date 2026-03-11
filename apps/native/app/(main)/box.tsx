@@ -1,14 +1,11 @@
 import { useLocalSearchParams } from "expo-router";
 import { Card } from "heroui-native";
-import { View } from "react-native";
 import Transition from "react-native-screen-transitions";
+import type { BoxRouteParams } from "@/components/navigation/screen-options";
 
 export default function BoxDetail() {
-	const { sharedBoundTag, title, description } = useLocalSearchParams<{
-		sharedBoundTag: string;
-		title: string;
-		description: string;
-	}>();
+	const { sharedBoundTag = "", title = "Box detail" } =
+		useLocalSearchParams<BoxRouteParams>();
 
 	return (
 		<Transition.ScrollView className="flex-1 bg-background p-4 pt-safe">
