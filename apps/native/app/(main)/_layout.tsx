@@ -1,19 +1,19 @@
-import Transition from "react-native-screen-transitions";
-
+import { View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { getFullScreenSheeetScale } from "@/components/navigation/screen-options";
 import { Stack } from "@/components/stack";
 
 export default function MainLayout() {
-  return (
-    <Stack>
-      <Stack.Screen name="(tabs)" />
-      <Stack.Screen
-        name="(flow)"
-        options={{
-          gestureEnabled: true,
-          gestureDirection: "horizontal",
-          // ...Transition.Presets.DraggableCard(),
-        }}
-      />
-    </Stack>
-  );
+	const { top } = useSafeAreaInsets();
+	return (
+		<View className="flex-1 bg-black">
+			<Stack>
+				<Stack.Screen name="(tabs)" />
+				<Stack.Screen
+					name="(flow)"
+					options={getFullScreenSheeetScale({ top })}
+				/>
+			</Stack>
+		</View>
+	);
 }
