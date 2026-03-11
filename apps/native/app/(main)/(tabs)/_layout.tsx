@@ -65,6 +65,7 @@ export default function TabLayout() {
 			className="flex-1 overflow-hidden bg-background"
 			style={{
 				borderRadius: 50,
+				borderCurve: "continuous",
 			}}
 		>
 			<Tabs>

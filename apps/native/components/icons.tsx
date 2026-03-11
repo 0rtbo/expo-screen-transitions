@@ -1,22 +1,30 @@
 import {
+	IconArrowsShuffle,
 	IconBell,
 	IconCompass,
 	IconHome,
+	IconLayoutBottombar,
 	IconMessage,
 	IconMeteorFilled,
+	IconPlus,
 	IconSettings,
+	IconSquare,
 	IconUser,
 	IconWorld,
 } from "@tabler/icons-react-native";
 import { withUniwind } from "uniwind";
 
 const icons = {
+	"arrows-shuffle": withUniwind(IconArrowsShuffle),
 	bell: withUniwind(IconBell),
 	compass: withUniwind(IconCompass),
 	home: withUniwind(IconHome),
+	"layout-bottombar": withUniwind(IconLayoutBottombar),
 	message: withUniwind(IconMessage),
 	"meteor-filled": withUniwind(IconMeteorFilled),
+	plus: withUniwind(IconPlus),
 	settings: withUniwind(IconSettings),
+	square: withUniwind(IconSquare),
 	user: withUniwind(IconUser),
 	world: withUniwind(IconWorld),
 } as const;

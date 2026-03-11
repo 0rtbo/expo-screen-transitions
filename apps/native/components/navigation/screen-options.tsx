@@ -144,3 +144,46 @@ export const getSharedElementOptions = (
 		},
 	};
 };
+
+// ============================================================================
+// iOS slide (horizontal with scale effect on background)
+// ============================================================================
+const IOS_SLIDE_BORDER_RADIUS = 60;
+
+export const slideOptions = (): BlankStackNavigationOptions => {
+	return {
+		experimental_enableHighRefreshRate: true,
+		gestureEnabled: true,
+		gestureDirection: "horizontal" as const,
+		screenStyleInterpolator: ({
+			layouts: {
+				screen: { width },
+			},
+			progress,
+			active,
+			focused,
+		}: any) => {
+			"worklet";
+
+			const radius = !active.animating ? 0 : IOS_SLIDE_BORDER_RADIUS;
+
+			const translateX = interpolate(
+				progress,
+				[0, 1, 2],
+				[width, 0, -width * 0.3],
+			);
+
+			return {
+				contentStyle: {
+					transform: [{ translateX }],
+					borderRadius: focused ? radius : 0,
+					overflow: "hidden",
+				},
+			};
+		},
+		transitionSpec: {
+			open: SNAPPY_SPRING,
+			close: SNAPPY_SPRING,
+		},
+	};
+};

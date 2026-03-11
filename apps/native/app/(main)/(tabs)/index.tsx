@@ -1,8 +1,8 @@
+import { IconPlus } from "@tabler/icons-react-native";
 import { router } from "expo-router";
-import { Button, Card } from "heroui-native";
-import { FlatList, Pressable, View } from "react-native";
+import { Button, Card, Menu } from "heroui-native";
+import { FlatList, View } from "react-native";
 import Transition from "react-native-screen-transitions";
-import { Header } from "@/components/header";
 import { TablerIcon } from "@/components/icons";
 
 type Box = {
@@ -50,14 +50,49 @@ export default function Discover() {
 				)}
 			/>
 
-			<Button
-				variant="primary"
-				isIconOnly
-				className="absolute right-4 bottom-4"
-				onPress={() => router.navigate("/(main)/(flow)/screen1")}
-			>
-				<TablerIcon name="meteor-filled" className="text-primary-foreground" />
-			</Button>
+			<Menu>
+				<Menu.Trigger asChild>
+					<Button
+						variant="primary"
+						isIconOnly
+						className="absolute right-4 bottom-4"
+					>
+						<IconPlus color={"white"} />
+					</Button>
+				</Menu.Trigger>
+				<Menu.Portal>
+					<Menu.Overlay />
+					<Menu.Content
+						presentation="popover"
+						placement="top"
+						align="end"
+						width={180}
+					>
+						<Menu.Item
+							onPress={() => router.navigate("/(main)/(flow)/screen1")}
+						>
+							<TablerIcon
+								name="arrows-shuffle"
+								size={20}
+								className="text-foreground"
+							/>
+							<Menu.ItemTitle>Flow</Menu.ItemTitle>
+						</Menu.Item>
+						<Menu.Item onPress={() => router.push("/basic")}>
+							<TablerIcon name="square" size={20} className="text-foreground" />
+							<Menu.ItemTitle>Slide</Menu.ItemTitle>
+						</Menu.Item>
+						<Menu.Item isDisabled>
+							<TablerIcon
+								name="layout-bottombar"
+								size={20}
+								className="text-foreground"
+							/>
+							<Menu.ItemTitle>Sheet</Menu.ItemTitle>
+						</Menu.Item>
+					</Menu.Content>
+				</Menu.Portal>
+			</Menu>
 		</View>
 	);
 }

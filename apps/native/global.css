@@ -7,6 +7,13 @@
 /* Dark blue-ish theme override */
 @layer theme {
 	:root {
+		@variant light {
+			/* Remove shadows */
+			--surface-shadow: 0 0 0 0 transparent;
+			--overlay-shadow: 0 0 0 0 transparent;
+			--field-shadow: 0 0 0 0 transparent;
+		}
+
 		@variant dark {
 			--background: oklch(18% 0.015 260);
 			--surface: oklch(22% 0.012 260);
@@ -16,6 +23,11 @@
 			--default: oklch(28% 0.01 260);
 			--border: oklch(30% 0.01 260);
 			--separator: oklch(38% 0.008 260);
+
+			/* Remove shadows */
+			--surface-shadow: 0 0 0 0 transparent;
+			--overlay-shadow: 0 0 0 0 transparent;
+			--field-shadow: 0 0 0 0 transparent;
 		}
 	}
 }

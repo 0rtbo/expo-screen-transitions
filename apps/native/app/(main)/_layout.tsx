@@ -3,6 +3,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import {
 	getFullScreenSheeetScale,
 	getSharedElementOptions,
+	slideOptions,
 } from "@/components/navigation/screen-options";
 import { Stack } from "@/components/stack";
 
@@ -26,6 +27,7 @@ export default function MainLayout() {
 						)
 					}
 				/>
+				<Stack.Screen name="basic" options={slideOptions()} />
 			</Stack>
 		</View>
 	);
