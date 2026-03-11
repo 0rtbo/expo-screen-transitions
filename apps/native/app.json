@@ -1,0 +1,25 @@
+{
+  "expo": {
+    "scheme": "expo-screen-transitions",
+    "userInterfaceStyle": "automatic",
+    "orientation": "default",
+    "web": {
+      "bundler": "metro"
+    },
+    "name": "expo-screen-transitions",
+    "slug": "expo-screen-transitions",
+    "plugins": [
+      "expo-font"
+    ],
+    "experiments": {
+      "typedRoutes": true,
+      "reactCompiler": true
+    },
+    "android": {
+      "package": "com.x0rtbo.exposcreentransitions"
+    },
+    "ios": {
+      "bundleIdentifier": "com.x0rtbo.exposcreentransitions"
+    }
+  }
+}
