@@ -9,7 +9,9 @@ export default function Screen4() {
 
   const handleComplete = () => {
     // Navigate back to the beginning or home
-    router.replace("./screen1");
+    // Using navigate instead of dismissTo to avoid native/JS state sync issues
+    // when dismissing multiple screens at once
+    router.navigate("/(main)/(tabs)");
   };
 
   return (

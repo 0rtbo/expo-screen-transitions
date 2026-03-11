@@ -1,6 +1,6 @@
 import { cn } from "heroui-native";
 import type { ReactNode } from "react";
-import { View, Text } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const HEADER_HEIGHT = 56;
@@ -17,7 +17,7 @@ function HeaderRoot({ children, className }: HeaderRootProps) {
   return (
     <View
       className={cn("flex-row items-center px-2 bg-background border-b border-border", className)}
-      style={{ minHeight: HEADER_HEIGHT + insets.top, paddingTop: insets.top }}
+      style={{ minHeight: HEADER_HEIGHT + insets.top, paddingTop: insets.top, borderBottomWidth: StyleSheet.hairlineWidth }}
     >
       {children}
     </View>

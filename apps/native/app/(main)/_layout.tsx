@@ -11,7 +11,7 @@ export default function MainLayout() {
         options={{
           gestureEnabled: true,
           gestureDirection: "horizontal",
-          ...Transition.Presets.DraggableCard(),
+          // ...Transition.Presets.DraggableCard(),
         }}
       />
     </Stack>

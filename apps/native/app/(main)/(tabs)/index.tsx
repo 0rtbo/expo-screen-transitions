@@ -1,14 +1,15 @@
 import { IconBell } from "@tabler/icons-react-native";
-import { Card, useThemeColor } from "heroui-native";
+import { Button, Card, useThemeColor } from "heroui-native";
 import { Pressable, View } from "react-native";
 
 import { Header } from "@/components/header";
+import { router } from "expo-router";
 
 export default function Discover() {
   const foreground = useThemeColor("foreground");
 
   return (
-    <View className="flex-1 bg-background">
+    <>
       <Header >
         <Header.Left />
         <Header.Title>Discover</Header.Title>
@@ -18,6 +19,13 @@ export default function Discover() {
           </Pressable>
         </Header.Right>
       </Header>
-    </View>
+      <View className="flex-1 justify-end p-4">
+      <Button onPress={() => router.navigate("/(main)/(flow)/screen1")}>
+        <Button.Label>
+          Label
+        </Button.Label>
+        </Button>
+      </View>
+    </>
   );
 }

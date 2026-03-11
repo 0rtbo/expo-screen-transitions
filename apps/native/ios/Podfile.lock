@@ -90,6 +90,9 @@ PODS:
     - ExpoModulesCore
   - ExpoSymbols (55.0.5):
     - ExpoModulesCore
+  - ExpoUI (55.0.1):
+    - ExpoModulesCore
+    - React-RCTFabric
   - ExpoWebBrowser (55.0.9):
     - ExpoModulesCore
   - FBLazyVector (0.83.2)
@@ -2294,7 +2297,8 @@ DEPENDENCIES:
   - "ExpoNetwork (from `../../../node_modules/.bun/expo-network@55.0.8+e5daecfdf48cd1f9/node_modules/expo-network/ios`)"
   - "ExpoRouter (from `../../../node_modules/.bun/expo-router@55.0.4+c761ca3c6ca56d1c/node_modules/expo-router/ios`)"
   - "ExpoSecureStore (from `../../../node_modules/.bun/expo-secure-store@55.0.8+e5daecfdf48cd1f9/node_modules/expo-secure-store/ios`)"
-  - "ExpoSymbols (from `../../../node_modules/.bun/expo-symbols@55.0.5+e79da8afcb859b36/node_modules/expo-symbols/ios`)"
+  - "ExpoSymbols (from `../../../node_modules/.bun/expo-symbols@55.0.5+0f906e1490ba7353/node_modules/expo-symbols/ios`)"
+  - "ExpoUI (from `../../../node_modules/.bun/@expo+ui@55.0.1+e5daecfdf48cd1f9/node_modules/@expo/ui/ios`)"
   - "ExpoWebBrowser (from `../../../node_modules/.bun/expo-web-browser@55.0.9+e5daecfdf48cd1f9/node_modules/expo-web-browser/ios`)"
   - "FBLazyVector (from `../../../node_modules/.bun/react-native@0.83.2+069b4c9d3e085d94/node_modules/react-native/Libraries/FBLazyVector`)"
   - "hermes-engine (from `../../../node_modules/.bun/react-native@0.83.2+069b4c9d3e085d94/node_modules/react-native/sdks/hermes-engine/hermes-engine.podspec`)"
@@ -2424,7 +2428,9 @@ EXTERNAL SOURCES:
   ExpoSecureStore:
     :path: "../../../node_modules/.bun/expo-secure-store@55.0.8+e5daecfdf48cd1f9/node_modules/expo-secure-store/ios"
   ExpoSymbols:
-    :path: "../../../node_modules/.bun/expo-symbols@55.0.5+e79da8afcb859b36/node_modules/expo-symbols/ios"
+    :path: "../../../node_modules/.bun/expo-symbols@55.0.5+0f906e1490ba7353/node_modules/expo-symbols/ios"
+  ExpoUI:
+    :path: "../../../node_modules/.bun/@expo+ui@55.0.1+e5daecfdf48cd1f9/node_modules/@expo/ui/ios"
   ExpoWebBrowser:
     :path: "../../../node_modules/.bun/expo-web-browser@55.0.9+e5daecfdf48cd1f9/node_modules/expo-web-browser/ios"
   FBLazyVector:
@@ -2608,6 +2614,7 @@ SPEC CHECKSUMS:
   ExpoRouter: 6b8875b84c8eef1359039c5b703c8ed18f536825
   ExpoSecureStore: ebb13e5e590b1e62ec530bd0cfe1a3e7f1867e26
   ExpoSymbols: 3d67a96643245a5d933ce7fbf535f95eb541f617
+  ExpoUI: db65f9a5eed67fc6b4789c4ca384cd22220fb359
   ExpoWebBrowser: f13a6e46e44049bbb8ce49ff8aaa4d819c87d1fe
   FBLazyVector: 32e9ed0301d0fcbc1b2b341dd7fcbf291f51eb83
   hermes-engine: 1b23d249fc37bc4309b200ba68f04030a2aa86d3
