@@ -60,7 +60,7 @@ export const getFullScreenSheeetScale = ({
 			const translateY = interpolate(
 				progress,
 				[0, 1, 2],
-				[height, 0, top],
+				[height, 0, top - 14],
 				"clamp",
 			);
 
@@ -71,6 +71,71 @@ export const getFullScreenSheeetScale = ({
 				overlayStyle: {
 					backgroundColor: "transparent",
 				},
+			};
+		},
+		transitionSpec: {
+			open: SNAPPY_SPRING,
+			close: SNAPPY_SPRING,
+		},
+	};
+};
+
+// ============================================================================
+// flow (horizontal push)
+// ============================================================================
+export const getFlowOptions = (): BlankStackNavigationOptions => {
+	return {
+		experimental_enableHighRefreshRate: true,
+		gestureEnabled: true,
+		gestureDirection: "horizontal" as const,
+		screenStyleInterpolator: ({
+			layouts: {
+				screen: { width },
+			},
+			progress,
+		}: any) => {
+			"worklet";
+
+			// 0→1: incoming (slides in from right)
+			// 1→2: outgoing (gets pushed fully to the left)
+			const translateX = interpolate(
+				progress,
+				[0, 1, 2],
+				[width, 0, -width],
+				"clamp",
+			);
+
+			return {
+				contentStyle: {
+					transform: [{ translateX }],
+					backgroundColor: "transparent",
+				},
+			};
+		},
+		transitionSpec: {
+			open: SNAPPY_SPRING,
+			close: SNAPPY_SPRING,
+		},
+	};
+};
+
+// ============================================================================
+// shared element (card expand)
+// ============================================================================
+export const getSharedElementOptions = (
+	sharedBoundTag: string,
+): BlankStackNavigationOptions => {
+	return {
+		experimental_enableHighRefreshRate: true,
+		gestureEnabled: true,
+		gestureDirection: "bidirectional",
+		screenStyleInterpolator: ({ progress, bounds }: any) => {
+			"worklet";
+			return {
+				contentStyle: {
+					opacity: interpolate(progress, [0, 1], [0, 0.8], "clamp"),
+				},
+				[sharedBoundTag]: bounds({ id: sharedBoundTag, method: "transform" }),
 			};
 		},
 		transitionSpec: {

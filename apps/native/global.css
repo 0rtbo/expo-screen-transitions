@@ -2,4 +2,20 @@
 @import "uniwind";
 @import "heroui-native/styles";
 
-@source './node_modules/heroui-native/lib';
+@source "./node_modules/heroui-native/lib";
+
+/* Dark blue-ish theme override */
+@layer theme {
+	:root {
+		@variant dark {
+			--background: oklch(18% 0.015 260);
+			--surface: oklch(22% 0.012 260);
+			--surface-secondary: oklch(26% 0.01 260);
+			--surface-tertiary: oklch(30% 0.008 260);
+			--overlay: oklch(22% 0.012 260);
+			--default: oklch(28% 0.01 260);
+			--border: oklch(30% 0.01 260);
+			--separator: oklch(38% 0.008 260);
+		}
+	}
+}
