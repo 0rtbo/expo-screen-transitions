@@ -93,12 +93,12 @@ const practiceCards = [
 
 export default function SheetScreen() {
 	return (
-		<View className="flex-1 bg-background-secondary">
+		<View className="flex-1 bg-background-secondary pb-safe">
 			<View
 				pointerEvents="none"
-				className="absolute inset-x-0 top-0 z-10 items-center bg-background-secondary px-4 pt-4 pb-3"
+				className="absolute inset-x-0 top-0 z-10 items-center bg-background-secondary py-2"
 			>
-				<View className="h-1.5 w-16 rounded-full bg-border" />
+				<View className="h-1.5 w-32 rounded-3xl bg-border" />
 			</View>
 
 			<Transition.ScrollView
@@ -107,23 +107,10 @@ export default function SheetScreen() {
 					gap: 16,
 					padding: 16,
 					paddingTop: 44,
-					paddingBottom: 40,
+					paddingBottom: 100,
 				}}
 				showsVerticalScrollIndicator={false}
 			>
-				<View className="gap-3">
-					<Text className="font-semibold text-foreground text-sm opacity-60">
-						Snap points demo
-					</Text>
-					<Text className="font-bold text-3xl text-foreground">
-						Sheet playground
-					</Text>
-					<Text className="text-base text-foreground leading-6 opacity-70">
-						Drag the sheet, scroll the content, tap outside it, or use the
-						buttons below to test the full snap-points setup.
-					</Text>
-				</View>
-
 				<View className="flex-row flex-wrap gap-3">
 					{snapActions.map((action) => (
 						<Button
@@ -161,7 +148,7 @@ export default function SheetScreen() {
 					</Card.Body>
 				</Card>
 
-				<Card variant="secondary" className="rounded-4xl">
+				{/*<Card variant="secondary" className="rounded-4xl">
 					<Card.Body className="gap-4 p-4">
 						<Text className="font-bold text-foreground text-xl">
 							Commented props to try next
@@ -180,9 +167,9 @@ export default function SheetScreen() {
 							</View>
 						))}
 					</Card.Body>
-				</Card>
+				</Card>*/}
 
-				{practiceCards.map((card) => (
+				{/*{practiceCards.map((card) => (
 					<Card key={card.title} variant="secondary" className="rounded-4xl">
 						<Card.Body className="gap-2 p-4">
 							<Text className="font-bold text-foreground text-lg">
@@ -193,7 +180,7 @@ export default function SheetScreen() {
 							</Text>
 						</Card.Body>
 					</Card>
-				))}
+				))}*/}
 			</Transition.ScrollView>
 		</View>
 	);

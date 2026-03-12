@@ -176,6 +176,7 @@ export const getSnapSheetOptions = (): BlankStackNavigationOptions => {
 					transform: [{ translateY }],
 					borderTopLeftRadius: borderRadius,
 					borderTopRightRadius: borderRadius,
+					borderCurve: "continuous",
 					overflow: "hidden",
 				},
 				backdropStyle: {
