@@ -4,7 +4,7 @@ import {
 	ThemeProvider,
 } from "@react-navigation/native";
 import { Stack } from "expo-router";
-import { useColorScheme } from "react-native";
+import { Platform, useColorScheme } from "react-native";
 
 export default function RootLayout() {
 	const colorScheme = useColorScheme();
@@ -31,6 +31,18 @@ export default function RootLayout() {
 					options={{
 						title: "Full Screen Modal",
 						presentation: "fullScreenModal",
+						animation:
+							Platform.OS === "android" ? "slide_from_bottom" : "default",
+					}}
+				/>
+				<Stack.Screen
+					name="form-sheet"
+					options={{
+						title: "Form Sheet",
+						presentation: "formSheet",
+						sheetAllowedDetents: [0.5, 1.0],
+						sheetGrabberVisible: true,
+						sheetCornerRadius: 20,
 					}}
 				/>
 			</Stack>

@@ -27,6 +27,14 @@ export default function HomeScreen() {
 					<Text style={styles.buttonText}>Open Full Screen Modal</Text>
 					<Text style={styles.buttonHint}>presentation: "fullScreenModal"</Text>
 				</Pressable>
+
+				<Pressable
+					style={styles.button}
+					onPress={() => router.push("/form-sheet")}
+				>
+					<Text style={styles.buttonText}>Open Form Sheet</Text>
+					<Text style={styles.buttonHint}>presentation: "formSheet"</Text>
+				</Pressable>
 			</View>
 		</View>
 	);
