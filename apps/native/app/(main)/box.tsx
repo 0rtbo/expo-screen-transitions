@@ -8,12 +8,14 @@ export default function BoxDetail() {
 		useLocalSearchParams<BoxRouteParams>();
 
 	return (
-		<Transition.ScrollView className="flex-1 bg-background p-4 pt-safe">
+		<Transition.ScrollView className="flex-1 p-4 pt-safe">
 			<Transition.View sharedBoundTag={sharedBoundTag}>
 				<Card className="z-100 h-72 rounded-4xl" variant="secondary">
-					<Card.Body className="flex-1 justify-between p-4">
-						<Card.Title className="text-2xl">{title}</Card.Title>
-					</Card.Body>
+					<Transition.View styleId="box-content" className="flex-1">
+						<Card.Body className="flex-1 justify-between p-4">
+							<Card.Title className="text-2xl">{title}</Card.Title>
+						</Card.Body>
+					</Transition.View>
 				</Card>
 			</Transition.View>
 		</Transition.ScrollView>

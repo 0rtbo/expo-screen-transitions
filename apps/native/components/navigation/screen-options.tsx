@@ -190,7 +190,71 @@ export const getSnapSheetOptions = (): BlankStackNavigationOptions => {
 		},
 	};
 };
+// ============================================================================
+// Snap Sheet Varient Two
+// ============================================================================
+export const getSnapSheetTranlateOptions = (): BlankStackNavigationOptions => {
+	return {
+		experimental_enableHighRefreshRate: true,
+		gestureEnabled: true,
+		gestureDirection: "vertical" as const,
+		snapPoints: SHEET_SNAP_POINTS,
+		initialSnapIndex: SHEET_INITIAL_SNAP_INDEX,
+		expandViaScrollView: true,
+		backdropBehavior: "collapse",
+		// backdropBehavior: "passthrough",
+		snapVelocityImpact: 0.1,
+		// gestureSnapLocked: true,
+		// backdropComponent: SheetBackdrop,
+		screenStyleInterpolator: ({
+			layouts: {
+				screen: { height },
+			},
+			progress,
+			snapIndex,
+		}: ScreenInterpolationProps) => {
+			"worklet";
 
+			const translateY = interpolate(progress, [0, 1], [height, 0], "clamp");
+			// const borderRadius = interpolate(
+			// 	snapIndex,
+			// 	[0, SHEET_SNAP_POINTS.length - 1],
+			// 	[32, 20],
+			// 	"clamp",
+			// );
+			const backdropOpacity = interpolate(
+				progress,
+				[
+					0,
+					SHEET_SNAP_POINTS[0],
+					SHEET_SNAP_POINTS[SHEET_SNAP_POINTS.length - 1],
+				],
+				[0, 0.16, 0.45],
+				"clamp",
+			);
+
+			return {
+				contentStyle: {
+					transform: [{ translateY }],
+					// borderTopLeftRadius: borderRadius,
+					// borderTopRightRadius: borderRadius,
+					borderCurve: "continuous",
+					overflow: "hidden",
+				},
+				backdropStyle: {
+					opacity: backdropOpacity,
+					backgroundColor: "#020617",
+				},
+			};
+		},
+		transitionSpec: {
+			open: SNAPPY_SPRING,
+			close: SNAPPY_SPRING,
+			expand: SHEET_SNAP_SPRING,
+			collapse: SHEET_SNAP_SPRING,
+		},
+	};
+};
 // ============================================================================
 // flow (horizontal push)
 // ============================================================================
@@ -298,10 +362,10 @@ export const getSharedElementOptions = (
 		}: ScreenInterpolationProps) => {
 			"worklet";
 			return {
-				contentStyle: {
-					opacity: interpolate(progress, [0, 1], [0, 0.8], "clamp"),
-				},
 				[sharedBoundTag]: bounds({ id: sharedBoundTag, method: "transform" }),
+				"box-content": {
+					opacity: interpolate(progress, [0, 1], [0, 1], "clamp"),
+				},
 			};
 		},
 		transitionSpec: {
