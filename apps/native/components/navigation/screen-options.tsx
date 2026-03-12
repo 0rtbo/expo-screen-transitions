@@ -89,16 +89,13 @@ export const getFullScreenSheet = (): BlankStackNavigationOptions => {
 // ============================================================================
 // full screen and scale
 // ============================================================================
-export const getFullScreenSheeetScale = ({
-	top,
-}: {
-	top: number;
-}): BlankStackNavigationOptions => {
+export const getFullScreenSheeetScale = (): BlankStackNavigationOptions => {
 	return {
 		experimental_enableHighRefreshRate: true,
 		gestureEnabled: true,
 		gestureDirection: "vertical" as const,
 		screenStyleInterpolator: ({
+			insets: { top },
 			layouts: {
 				screen: { height },
 			},
@@ -112,12 +109,11 @@ export const getFullScreenSheeetScale = ({
 				[height, 0, top - 14],
 				"clamp",
 			);
-
 			return {
 				contentStyle: {
 					transform: [{ scale }, { translateY }],
 				},
-				overlayStyle: {
+				backdropStyle: {
 					backgroundColor: "transparent",
 				},
 			};
@@ -141,6 +137,7 @@ export const getSnapSheetOptions = (): BlankStackNavigationOptions => {
 		initialSnapIndex: SHEET_INITIAL_SNAP_INDEX,
 		expandViaScrollView: true,
 		backdropBehavior: "collapse",
+		// backdropBehavior: "passthrough",
 		snapVelocityImpact: 0.1,
 		// gestureSnapLocked: true,
 		// backdropComponent: SheetBackdrop,
@@ -234,6 +231,58 @@ export const getFlowOptions = (): BlankStackNavigationOptions => {
 };
 
 // ============================================================================
+// stack test (Airbnb-style modal deck)
+// ============================================================================
+export const getStackTestOptions = (): BlankStackNavigationOptions => {
+	return {
+		experimental_enableHighRefreshRate: true,
+		gestureEnabled: true,
+		gestureDirection: "vertical" as const,
+		detachPreviousScreen: false,
+		screenStyleInterpolator: ({
+			current,
+			stackProgress,
+			layouts: {
+				screen: { height },
+			},
+		}: ScreenInterpolationProps) => {
+			"worklet";
+
+			const translateY = interpolate(
+				stackProgress,
+				[0, 1, 2, 3],
+				[height, 0, -30, 0],
+				"clamp",
+			);
+			const scale = interpolate(
+				stackProgress,
+				[0, 1, 2, 3],
+				[0.8, 1, 0.96, 0.96],
+				"clamp",
+			);
+			const backdropOpacity =
+				interpolate(current.progress, [0, 1], [0, 0.24], "clamp") *
+				interpolate(stackProgress, [1, 2], [1, 0], "clamp");
+
+			return {
+				contentStyle: {
+					backgroundColor: "transparent",
+					transform: [{ translateY }, { scale }],
+				},
+				backdropStyle: {
+					backgroundColor: "#020617",
+					opacity: backdropOpacity,
+				},
+			};
+		},
+		transitionSpec: {
+			open: SNAPPY_SPRING,
+			close: SNAPPY_SPRING,
+		},
+	};
+};
+
+// ============================================================================
 // shared element (card expand)
 // ============================================================================
 export const getSharedElementOptions = (
@@ -293,6 +342,7 @@ export const slideOptions = (): BlankStackNavigationOptions => {
 			progress,
 			active,
 			focused,
+			insets: { top },
 		}: ScreenInterpolationProps) => {
 			"worklet";
 

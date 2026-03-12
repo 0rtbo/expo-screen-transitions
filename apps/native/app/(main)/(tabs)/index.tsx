@@ -22,7 +22,7 @@ const boxes: Box[] = [
 
 export default function Discover() {
 	return (
-		<View className="flex-1 bg-background">
+		<View className="flex-1 bg-background px-safe">
 			<FlatList
 				data={boxes}
 				numColumns={2}
@@ -77,6 +77,10 @@ export default function Discover() {
 								className="text-foreground"
 							/>
 							<Menu.ItemTitle>Flow</Menu.ItemTitle>
+						</Menu.Item>
+						<Menu.Item onPress={() => router.push("/stack-test/1")}>
+							<TablerIcon name="square" size={20} className="text-foreground" />
+							<Menu.ItemTitle>Stack Test</Menu.ItemTitle>
 						</Menu.Item>
 						<Menu.Item onPress={() => router.push("/basic")}>
 							<TablerIcon name="square" size={20} className="text-foreground" />
