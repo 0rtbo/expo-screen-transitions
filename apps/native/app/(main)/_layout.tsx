@@ -1,8 +1,8 @@
 import { View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import {
+	getBoxSharedElementOptions,
 	getFullScreenSheeetScale,
-	getSharedElementOptions,
 	getSnapSheetOptions,
 	slideOptions,
 } from "@/components/navigation/screen-options";
@@ -21,12 +21,7 @@ export default function MainLayout() {
 				/>
 				<Stack.Screen
 					name="box"
-					options={({ route }) =>
-						getSharedElementOptions(
-							(route.params as { sharedBoundTag?: string })?.sharedBoundTag ??
-								"",
-						)
-					}
+					options={({ route }) => getBoxSharedElementOptions(route.params)}
 				/>
 				<Stack.Screen name="basic" options={slideOptions()} />
 				<Stack.Screen name="sheet" options={getSnapSheetOptions()} />

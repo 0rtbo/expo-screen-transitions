@@ -1,272 +1,425 @@
-# YouTube Video Plan: React Native Screen Transitions + AI Workflow
+# YouTube Video Script: React Native Screen Transitions + AI
 
-## Goal
+This version is based on the current codebase, not the earlier draft.
 
-Make one video that does three things clearly:
+The app now has four real demo paths worth showing on camera:
 
-1. Shows what `react-native-screen-transitions` makes possible in a real Expo app.
-2. Explains the mental model for building custom transitions.
-3. Shows how AI can generate transition ideas and the first draft of the interpolator code.
+1. Flow entry + in-flow push transitions
+2. iOS-style slide
+3. Snap sheet
+4. Shared element card expansion
 
-## Recommended angle
+## Fast route map
 
-The best framing is:
+- App shell: `apps/native/app/_layout.tsx`
+- Custom stack bridge: `apps/native/components/stack.tsx`
+- Main route-to-transition wiring: `apps/native/app/(main)/_layout.tsx`
+- Demo launcher: `apps/native/app/(main)/(tabs)/index.tsx`
+- Transition presets: `apps/native/components/navigation/screen-options.tsx`
+- Flow overlay logic: `apps/native/app/(main)/(flow)/_layout.tsx`
 
-"Most React Native apps use the default stack transition. In this video we will build transitions that feel product-specific, then use AI to generate new ones from motion descriptions."
+## Recommended demo order
 
-That gives the video both a practical payoff and an AI hook without making the AI part feel gimmicky.
+Use this order in the video so each section builds on the last one:
 
-## What we already have in this repo
+1. Hook with the flow entry animation
+2. Show how Expo Router is still the routing system
+3. Explain the custom stack bridge
+4. Show how transitions are assigned per route
+5. Teach the `progress -> styles` mental model
+6. Break down the flow example
+7. Show the slide preset
+8. Show the snap sheet preset
+9. Show the shared element preset
+10. Use AI to generate a new preset from a motion description
 
-- `apps/native/components/stack.tsx` wires Expo Router into `createBlankStackNavigator()`.
-- `apps/native/components/navigation/screen-options.tsx` already has a few strong transition presets:
-  - `getFlowOptions()` - horizontal flow push
-  - `getFullScreenSheet()` - vertical full-screen sheet
-  - `getFullScreenSheeetScale()` - sheet + background scale
-- `apps/native/app/(main)/_layout.tsx` already uses the sheet + scale transition when entering the flow.
-- `apps/native/app/(main)/(flow)/_layout.tsx` already uses the horizontal flow transition between screens.
+## Part 1 - Hook
 
-This is enough to build the video around a small set of polished examples instead of starting from zero.
+### On screen
 
-## Best video structure
+- Start on `/(main)/(tabs)/index`
+- Open the menu and tap `Flow`
+- Tap through `screen1` to `screen4`
+- Go back home, then quickly show `Sheet`
+- Tap one of the boxes to show the shared transition
 
-### 1. Hook (0:00 - 0:30)
+### Say
 
-Open with the most impressive motion first:
+"Most React Native apps ship with the default stack transition. This app does not."
 
-- enter the flow with the full-screen sheet + background scale
-- tap through `screen1` -> `screen4`
-- quickly show one AI-generated variation at the end of the hook
+"It is still an Expo Router app, but every one of these transitions is custom. We have a layered flow, an iOS-style slide, a snap sheet, and a shared element card transition."
 
-Line to land early:
+"Then at the end I will show you how AI can generate new transition ideas once you understand the mental model."
 
-"These transitions are not hardcoded native screens. They are custom interpolators in an Expo app, and you can even use AI to design new ones."
+### Files to mention later
 
-### 2. Why this library matters (0:30 - 1:30)
+- `apps/native/app/(main)/(tabs)/index.tsx`
+- `apps/native/app/(main)/_layout.tsx`
+- `apps/native/components/navigation/screen-options.tsx`
 
-Explain the problem:
+## Part 2 - This Is Still an Expo Router App
 
-- default transitions are fine, but they do not match every product
-- many apps need flows that feel like onboarding, sheets, cards, or layered navigation
-- `react-native-screen-transitions` gives you control over the animation math
+### On screen
 
-Keep this part visual and short.
+- Open `apps/native/app/_layout.tsx`
+- Open `apps/native/components/stack.tsx`
 
-### 3. Show the core mental model (1:30 - 4:00)
+### Say
 
-This is the most important teaching section.
+"The first thing I want to make clear is that this is still a normal Expo Router app. File-based routing is still doing the route matching."
 
-Explain that each transition is basically:
+"What changes is the stack implementation. Instead of using the default stack, this project bridges Expo Router into `createBlankStackNavigator()` from `react-native-screen-transitions`."
 
-- a `screenStyleInterpolator`
-- a `progress` value
-- some `interpolate()` calls
-- returned styles like `transform`, `opacity`, and `overlayStyle`
+"That gives us file-based routes on one side, and fully custom transition math on the other."
 
-Good teaching line:
+### Key code points
 
-"You are not building magic. You are mapping navigation progress into styles."
+- `apps/native/app/_layout.tsx` sets up the app shell with gesture handling, keyboard support, theme, and the status bar.
+- `apps/native/components/stack.tsx` is the architectural hinge. `withLayoutContext(...)` connects Expo Router to the blank stack navigator.
 
-Use `apps/native/components/navigation/screen-options.tsx` as the main teaching file.
+### One-liner
 
-## Demo examples to include
+"Expo Router still owns the routes. `react-native-screen-transitions` owns the motion."
 
-I would keep the video to 3 examples total so it stays focused.
+## Part 3 - Where Each Demo Is Wired In
 
-### Example 1 - Flow push
+### On screen
 
-Use `getFlowOptions()` as the first technical example.
+- Open `apps/native/app/(main)/_layout.tsx`
 
-Why it works well:
+### Say
 
-- easy to understand
-- clearly shows incoming and outgoing screens
-- great for explaining the `progress` ranges `0 -> 1 -> 2`
+"This file is where the app stops being a generic router setup and starts becoming a transitions demo."
 
-Talking points:
+"At the layout level, each route gets its own transition preset. That means the flow route, the box detail route, the slide screen, and the sheet screen can all feel completely different even though they live in the same app."
 
-- incoming screen starts at `width`
-- active screen rests at `0`
-- previous screen gets pushed left to `-width * 0.3`
-- the transition feels more app-specific than the default stack
+### Walkthrough lines
 
-### Example 2 - Full-screen sheet
+- `name="(tabs)"` is the home shell.
+- `name="(flow)"` uses `getFullScreenSheeetScale({ top })`.
+- `name="box"` uses the shared element preset.
+- `name="basic"` uses `slideOptions()`.
+- `name="sheet"` uses `getSnapSheetOptions()`.
 
-Use `getFullScreenSheet()` next.
+### One-liner
 
-Why it works well:
+"The layout is where we decide what motion language belongs to each route."
 
-- simple vertical mental model
-- good for modals, create flows, paywalls, or compose screens
-- easy to compare with the horizontal flow transition
+## Part 4 - The Demo Launcher Screen
 
-Talking points:
+### On screen
 
-- gesture direction changes from horizontal to vertical
-- the screen moves from `height` to `0`
-- one small math change creates a very different UX feeling
+- Open `apps/native/app/(main)/(tabs)/index.tsx`
+- Scroll through the screen slowly
 
-### Example 3 - Sheet with background scale
+### Say
 
-Use `getFullScreenSheeetScale()` as the "polished production" example.
+"This is the home screen for the whole demo. The grid of boxes is the shared element source, and the floating menu launches the other transition examples."
 
-Why it works well:
+"I like this setup for a video because it makes the app feel real. It is not just one isolated animation sandbox. It is a routed app with multiple transition patterns living together."
 
-- this is the most YouTube-friendly demo
-- it looks advanced without being hard to explain
-- it is the perfect bridge into AI-generated ideas
+### Callouts
 
-Talking points:
+- The boxes use `Transition.Pressable sharedBoundTag={item.id}`.
+- Pressing a box pushes to `/(main)/box` with params.
+- The floating menu launches:
+  - `/(main)/(flow)/screen1`
+  - `/basic`
+  - `/sheet`
 
-- the presented screen slides up
-- the previous screen scales down slightly
-- the top inset helps the background settle naturally
-- this is where custom transitions start to feel premium
+### One-liner
 
-## How to present the AI portion
+"This screen is the table of contents for the whole video."
 
-The AI section should come after the manual explanation, not before.
+## Part 5 - The Core Mental Model
 
-That order matters because the audience should first understand:
+### On screen
 
-- what the library expects
-- what `progress` controls
-- how interpolation maps to motion
+- Open `apps/native/components/navigation/screen-options.tsx`
 
-Then AI becomes a multiplier, not a black box.
+### Say
 
-## AI demo flow
+"This is the most important file in the project. If you understand this file, you understand how to build your own transitions."
 
-### Step 1 - Describe the motion in plain English
+"The core idea is simple: navigation gives you a `progress` value, and you map that value into styles with `interpolate()`."
 
-Use prompts like:
+"You are not building magic. You are mapping progress into `translateX`, `translateY`, `scale`, `opacity`, border radius, or backdrop styles."
 
-"Create a React Native screen transition for `react-native-screen-transitions/blank-stack`. I want the new screen to slide in from the right, while the previous screen scales to 0.96 and shifts slightly left. Use `react-native-reanimated` `interpolate`, support gesture navigation, and return a `BlankStackNavigationOptions` object."
+### What to point at
 
-### Step 2 - Ask AI for the interpolator only
+- Shared spring configs at the top
+- `screenStyleInterpolator`
+- Layout values like `width` and `height`
+- `progress` ranges like `0 -> 1` and `0 -> 1 -> 2`
+- Returned `contentStyle`, `overlayStyle`, `backdropStyle`, or shared bounds entries
 
-This usually gives cleaner output than asking for an entire app.
+### Teaching line
 
-Ask for:
+"`0` is usually where the new screen starts, `1` is where it rests, and `2` is often how the previous screen behaves once something else is on top of it."
 
-- the `screenStyleInterpolator`
-- the `gestureDirection`
-- the `transitionSpec`
-- a short explanation of the progress ranges
+## Part 6 - Flow Demo, Part A: Entering the Flow
 
-### Step 3 - Refine with design language
+### On screen
 
-Good refinement words:
+- Run the app
+- From the home screen, tap `Flow`
+- Then open `apps/native/app/(main)/_layout.tsx`
+- Then show `getFullScreenSheeetScale()` in `apps/native/components/navigation/screen-options.tsx`
 
-- snappier
-- more elastic
-- less distance
-- stronger depth
-- subtle parallax
-- more modal-like
+### Say
 
-### Step 4 - Verify in app
+"The first part of the flow demo is the entry transition. The whole flow comes in like a full-screen sheet, and the background settles underneath it."
 
-Show that AI gets you 70 to 80 percent there, then you tune:
+"That is happening at the parent stack level, not inside the flow screens themselves."
 
-- distances
-- scale amount
-- opacity
-- spring config
-- gesture direction
+"The new route moves vertically from the bottom, while the previous route scales slightly and shifts down to create depth."
 
-That is the real value story for the video.
+### Code points to explain
 
-## Prompt template for the video
+- `gestureDirection: "vertical"`
+- `translateY` maps from `height` to `0`
+- `scale` maps to `0.96` for the background layer
+- `top - 14` helps the underlying screen settle naturally with safe area spacing
 
-Use a repeatable template on screen:
+### One-liner
+
+"Before we even enter the flow screens, we already changed the feel of the app."
+
+## Part 7 - Flow Demo, Part B: Inside the Flow
+
+### On screen
+
+- Open `apps/native/app/(main)/(flow)/_layout.tsx`
+- Open `apps/native/components/navigation/screen-options.tsx`
+- Step through `screen1`, `screen2`, `screen3`, and `screen4`
+
+### Say
+
+"Once we are inside the flow, the motion language changes. Entering the flow is vertical, but moving through the steps is horizontal."
+
+"That is a great example of why custom transitions matter. One route group can feel modal, and the next layer can feel like a multi-step onboarding flow."
+
+### Explain the stack setup
+
+- `screen1` uses a custom overlay and acts like the first step.
+- `screen2`, `screen3`, and `screen4` use `getFlowOptions()`.
+- Each screen also gets `meta` so the overlay button knows what action to run.
+
+### Explain `getFlowOptions()`
+
+Say this while pointing at the interpolator:
+
+"Here the incoming screen starts at full `width`, rests at `0`, and then the previous screen keeps moving left when the next screen enters."
+
+"That `0 -> 1 -> 2` mapping is the cleanest way to explain custom stack transitions."
+
+### Explain the overlay
+
+Say this while pointing at `FlowOverlay` in `apps/native/app/(main)/(flow)/_layout.tsx`:
+
+"The overlay is what makes this feel like product UI instead of just animation math."
+
+"The progress dots read the same transition progress value, and the bottom button uses per-screen metadata so it always knows what the next action should be."
+
+"On screen two there is an input, and the bottom CTA shifts with the keyboard. That is a small detail, but it proves this can work in a real app flow, not just in a static demo."
+
+### Useful lines
+
+- "The transition is custom, but the UX still has to behave like a real screen."
+- "This is where animation stops being decorative and starts supporting navigation."
+
+## Part 8 - The Basic Slide Preset
+
+### On screen
+
+- Launch `/basic`
+- Open `apps/native/components/navigation/screen-options.tsx`
+- Open `apps/native/app/(main)/basic.tsx`
+
+### Say
+
+"This example is intentionally simple. It isolates the horizontal slide preset so you can feel one transition without other moving parts around it."
+
+"If the flow demo shows a more product-shaped experience, this one shows the bare minimum structure of a custom preset."
+
+### Explain the preset
+
+- `gestureDirection` is horizontal
+- `translateX` moves from `width` to `0`
+- the previous layer shifts left for depth
+- the content keeps a large continuous border radius for a rounded card-like feel
+
+### One-liner
+
+"This is a good starter preset because it is easy to understand and easy to remix."
+
+## Part 9 - The Snap Sheet Preset
+
+### On screen
+
+- Launch `/sheet`
+- Drag the sheet up and down
+- Tap the snap buttons
+- Tap the backdrop
+- Scroll the content upward at the top
+- Open `apps/native/components/navigation/screen-options.tsx`
+- Open `apps/native/app/(main)/sheet.tsx`
+
+### Say
+
+"This is probably the richest demo in the project because it shows that transitions are not only about open and close. They can also manage intermediate states."
+
+"Instead of a single final position, this screen has snap points. That means the sheet can rest at multiple heights and use different spring behavior when expanding or collapsing between them."
+
+### Explain the preset
+
+- `snapPoints` defines the resting positions
+- `initialSnapIndex` controls where the sheet starts
+- `expandViaScrollView` lets the sheet keep expanding from scroll gestures
+- `backdropBehavior: "collapse"` makes the backdrop step the sheet downward before dismissing
+- `transitionSpec.expand` and `collapse` use a softer spring than open and close
+
+### Explain why `sheet.tsx` is good for the video
+
+"I like this screen for a tutorial because the UI explains the config back to the viewer."
+
+"The buttons call `snapTo(index)`, the cards describe the active props, and there are even commented options in `screen-options.tsx` you can turn on next."
+
+### One-liner
+
+"This is where the library starts feeling more like a navigation engine than a simple animation helper."
+
+## Part 10 - The Shared Element Box Demo
+
+### On screen
+
+- Return to the home screen
+- Tap a box from the grid
+- Open `apps/native/app/(main)/(tabs)/index.tsx`
+- Open `apps/native/app/(main)/box.tsx`
+- Open `apps/native/components/navigation/screen-options.tsx`
+
+### Say
+
+"The shared element example is nice because the code is surprisingly small for how polished the result feels."
+
+"The source card uses `Transition.Pressable` with a `sharedBoundTag`, the destination uses `Transition.View` with the same tag, and the screen options use `bounds({ id, method: \"transform\" })` to connect the two."
+
+"So instead of just pushing a new screen in, the actual card grows into the destination layout."
+
+### Explain the files
+
+- `apps/native/app/(main)/(tabs)/index.tsx` is the source
+- `apps/native/app/(main)/box.tsx` is the destination
+- `apps/native/components/navigation/screen-options.tsx` defines the shared element preset
+- `apps/native/app/(main)/_layout.tsx` assigns that preset to the `box` route
+
+### One-liner
+
+"This is a really good example of getting a premium feel with a very small amount of code."
+
+## Part 11 - Supporting Files You Can Mention Quickly
+
+These are not core to the transition logic, but they help the app read as intentional on camera.
+
+### `apps/native/app/(main)/(tabs)/_layout.tsx`
+
+Say:
+
+"The tab shell has a big rounded container, which helps the layered transitions feel more like stacked cards and less like hard-edged full-screen swaps."
+
+### `apps/native/global.css`
+
+Say:
+
+"The theme is stripped down and shadow-light on purpose so the motion reads clearly in the recording."
+
+### `apps/native/components/header.tsx`
+
+Say:
+
+"The secondary tabs are intentionally simple. They make the app feel like a real product shell without distracting from the transition demos."
+
+### `apps/native/babel.config.js`
+
+Say:
+
+"If you are following along, remember that Reanimated needs its Babel plugin enabled or these interpolators will not work correctly."
+
+## Part 12 - AI Segment
+
+### On screen
+
+- Keep `apps/native/components/navigation/screen-options.tsx` open
+- Show one of the existing presets first
+- Then show your AI prompt
+
+### Say
+
+"Now that we understand the shape of these presets, this is where AI becomes useful."
+
+"I do not want AI to invent the whole app. I want it to generate a `BlankStackNavigationOptions` starter based on a motion description."
+
+"The important part is that you already know what to ask for: gesture direction, progress mapping, interpolated styles, and spring behavior."
+
+### Prompt template
 
 ```txt
 Create a custom transition for react-native-screen-transitions/blank-stack.
 
-Requirements:
-- Return a BlankStackNavigationOptions object
-- Use react-native-reanimated interpolate
-- Support gesture navigation
-- Explain the progress mapping
+Return a BlankStackNavigationOptions object.
+Use react-native-reanimated interpolate.
+Support gesture navigation.
+Explain the progress mapping.
 
 Motion:
-- Incoming screen: [describe start -> end]
-- Outgoing screen: [describe active -> resting state]
-- Optional overlay: [describe opacity/color]
+- Incoming screen: [describe it]
+- Current screen underneath: [describe it]
+- Optional overlay/backdrop: [describe it]
 
 Constraints:
-- Keep it smooth and production-friendly
+- Keep it production-friendly
 - Use a spring transitionSpec
-- Avoid shared element assumptions
+- Do not assume shared elements unless I ask for them
 ```
 
-## Suggested examples for AI-generated variants
+### Good examples to ask AI for
 
-These are good because they are easy to describe and easy to judge visually:
+- "Make this feel more like a card deck."
+- "Turn this into a subtle parallax push."
+- "Give me a modal that lifts from the bottom while the background rounds more."
+- "Create a lightweight fade-and-slide preset for utility screens."
 
-1. Card deck push - next screen slides in while current screen shrinks and darkens slightly.
-2. Layered modal - screen comes from bottom, background scales and rounds more.
-3. Parallax push - next screen moves normally, previous screen drifts slower for depth.
-4. Fade + slide - lightweight transition for settings or utility screens.
+### Important line
 
-## Production plan before recording
+"AI is good at giving you a strong first draft, but you still art direct the feel by adjusting distance, scale, opacity, and spring values."
 
-Before filming, we should make the demo app feel intentional:
+## Part 13 - Wrap-up
 
-### Must-have
+### Say
 
-- add a simple "Transitions Lab" entry screen with buttons for each example
-- give each example a clear name that matches the narration
-- keep colors/backgrounds distinct so motion reads clearly on camera
-- make sure gestures work cleanly in both directions
+"The big takeaway is that custom screen transitions are just style interpolation driven by navigation progress."
 
-### Nice-to-have
+"Once you understand that, you can mix different motion languages across the same app: modal entry, flow push, snap sheets, and shared elements."
 
-- add one screen that lets you swap between transition presets quickly
-- add a small text label showing which preset is active
-- keep animation timing/springs consistent across examples unless the difference is intentional
+"And once you understand the structure of a preset, AI becomes a really practical way to generate new transition ideas fast."
 
-## Recording checklist
+## If You Need A Shorter Version
 
-- record simulator and code side by side
-- zoom into `screen-options.tsx` during the explanation
-- show one transition once at full speed, then once slowly while narrating the math
-- keep the AI prompt visible long enough for viewers to copy the structure
-- end with a montage of 3 to 4 transition variations
+If you want a tighter edit, keep these sections and cut the rest:
 
-## Suggested talking points by section
+1. Part 1 - Hook
+2. Part 3 - Route wiring
+3. Part 5 - Core mental model
+4. Part 7 - Flow internals
+5. Part 9 - Snap sheet
+6. Part 10 - Shared element
+7. Part 12 - AI segment
 
-### When introducing the library
+## Bonus Code-Only Mention
 
-"This gives you control over the transition itself, not just the screen content."
+There is also an unused `getFullScreenSheet()` preset in `apps/native/components/navigation/screen-options.tsx`.
 
-### When explaining the interpolator
+If you want one fast extra line, say:
 
-"The whole trick is deciding what the screen should look like at progress 0, 1, and sometimes 2."
-
-### When introducing AI
-
-"AI is great at turning motion language into starter code, but you still need to art direct the final feel."
-
-### When wrapping up
-
-"Once you understand the progress mapping, you can design transitions the same way you design UI: by describing the experience you want."
-
-## Best outcome for this project
-
-If we do this well, the video should leave viewers with:
-
-- one clear mental model
-- three reusable transition patterns
-- one prompt framework for generating their own ideas with AI
-- confidence that this works in a real Expo Router app
-
-## Recommended next build tasks
-
-To support the video, the next implementation pass should be:
-
-1. Add a dedicated transitions demo screen that links to each example.
-2. Surface the existing sheet and sheet + scale presets in the UI.
-3. Add one new AI-generated preset so the video has a before/after AI segment.
-4. Polish labels, spacing, and colors so each transition reads clearly on camera.
+"There is also a simpler full-screen sheet preset in the codebase, but I kept the video focused on the examples that are already wired into the app UI."
