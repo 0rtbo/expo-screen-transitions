@@ -1,35 +1,22 @@
-import { Tabs } from "expo-router";
-import { SymbolView } from "expo-symbols";
+import { NativeTabs } from "expo-router/unstable-native-tabs";
 
 export default function TabLayout() {
 	return (
-		<Tabs>
-			<Tabs.Screen
-				name="index"
-				options={{
-					title: "Home",
-					tabBarIcon: ({ color }) => (
-						<SymbolView
-							name={{ ios: "house", android: "home", web: "home" }}
-							tintColor={color}
-							size={24}
-						/>
-					),
-				}}
-			/>
-			<Tabs.Screen
-				name="explore"
-				options={{
-					title: "Explore",
-					tabBarIcon: ({ color }) => (
-						<SymbolView
-							name={{ ios: "safari", android: "explore", web: "explore" }}
-							tintColor={color}
-							size={24}
-						/>
-					),
-				}}
-			/>
-		</Tabs>
+		<NativeTabs>
+			<NativeTabs.Trigger name="index">
+				<NativeTabs.Trigger.Icon
+					sf={{ default: "house", selected: "house.fill" }}
+					md="home"
+				/>
+				<NativeTabs.Trigger.Label>Home</NativeTabs.Trigger.Label>
+			</NativeTabs.Trigger>
+			<NativeTabs.Trigger name="explore">
+				<NativeTabs.Trigger.Icon
+					sf={{ default: "safari", selected: "safari.fill" }}
+					md="explore"
+				/>
+				<NativeTabs.Trigger.Label>Explore</NativeTabs.Trigger.Label>
+			</NativeTabs.Trigger>
+		</NativeTabs>
 	);
 }
