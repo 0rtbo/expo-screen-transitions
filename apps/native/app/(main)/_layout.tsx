@@ -19,7 +19,7 @@ export default function MainLayout() {
 					options={({ route }) => getBoxSharedElementOptions(route.params)}
 				/>
 				<Stack.Screen name="stack-test/[id]" options={getStackTestOptions()} />
-				<Stack.Screen name="basic" options={slideOptions()} />
+				<Stack.Screen name="basic" options={slideOptions} />
 				<Stack.Screen name="sheet" options={getSnapSheetOptions()} />
 			</Stack>
 		</View>
